@@ -1,0 +1,32 @@
+---
+title: "Assignment B1"
+author: "Eric Xiang"
+date: "2024-10-24"
+output:github_document
+---
+```{r}
+#import 
+library(palmerpenguins)# use penguin dataset to test the function 
+library(dplyr)
+library(tidyverse)
+library(testthat)
+```
+
+```{r}
+group_summary<-function(x,y,na.rm=FALSE)
+  if(!is.numeric(x) stop("Input is not numeric, object is of class",class(x)[1]) 
+  if(!(y%in%penguins)stop("variable is not in the dataset",)) 
+  group_by(y)
+  result<-summarize(median=median(x))
+  paste("By y, the mean of x is", result)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
