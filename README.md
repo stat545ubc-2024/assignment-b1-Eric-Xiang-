@@ -4,3 +4,7 @@
 This is an assignment B1 . It contains:
 
 
+AssignmentB1 RMD file: This is the answer for assignment B1 Making a function. It makes, documents and tests a summarize_data function with penguin dataset. 
+AssignmentB1 RMD.md files: This is the github output for assignment B1
+
+
