@@ -4,9 +4,14 @@ Eric Xiang
 2024-10-24
 
 ``` r
+#install if needed
+#install.packages("roxygen2")
+```
+
+``` r
 #import 
 library(palmerpenguins)# use penguin dataset to test the function 
-library(dplyr)
+library(dplyr)#for data manipulation
 ```
 
     ## 
@@ -21,7 +26,7 @@ library(dplyr)
     ##     intersect, setdiff, setequal, union
 
 ``` r
-library(tidyverse)
+library(tidyverse)#
 ```
 
     ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
@@ -60,7 +65,7 @@ library(testthat)
 
 ``` r
 library(usethis)
-library(devtools)#for marking down the function 
+library(devtools)#for marking down the function
 ```
 
     ## 
@@ -71,24 +76,27 @@ library(devtools)#for marking down the function
     ##     test_file
 
 ``` r
-penguins
+library(roxygen2)
+library(here)
 ```
 
-    ## # A tibble: 344 × 8
-    ##    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
-    ##    <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
-    ##  1 Adelie  Torgersen           39.1          18.7               181        3750
-    ##  2 Adelie  Torgersen           39.5          17.4               186        3800
-    ##  3 Adelie  Torgersen           40.3          18                 195        3250
-    ##  4 Adelie  Torgersen           NA            NA                  NA          NA
-    ##  5 Adelie  Torgersen           36.7          19.3               193        3450
-    ##  6 Adelie  Torgersen           39.3          20.6               190        3650
-    ##  7 Adelie  Torgersen           38.9          17.8               181        3625
-    ##  8 Adelie  Torgersen           39.2          19.6               195        4675
-    ##  9 Adelie  Torgersen           34.1          18.1               193        3475
-    ## 10 Adelie  Torgersen           42            20.2               190        4250
-    ## # ℹ 334 more rows
-    ## # ℹ 2 more variables: sex <fct>, year <int>
+    ## here() starts at C:/Users/Eric Xiang/Desktop/assignment-b1-EricXiang1104
+
+``` r
+#Exercise 2 documentation with Roxygen 
+
+
+#' Summarize the variables in the provided data 
+#'
+#' @param data: a data set in the data frame format 
+#' @param ...  ellipse, indicating one or multiple grouping variables, has to be a categorical variable existed in the dataset to group the population  
+#' @param summ_vars: a summarizing variable must be numeric variable and existed in the dataset 
+#'@param na.rm: logical variable to indicate if missing value should be removed or not. default is FALSE(not remove) 
+#' @return A summayr tibble to calculate the mean, median and standard deviation of the indicated variables. 
+#' @examples
+#' summarize_data(penguins,species,island,summ_vars=bill_length_mm,na.rm=TRUE)
+#' summarize_data(penguins,sex,island,summ_vars=bill_depth_mm,na.rm=TRUE)
+```
 
 ``` r
 summarize_data<- function(data,...,summ_vars,na.rm=FALSE){
@@ -101,11 +109,6 @@ summarize_data<- function(data,...,summ_vars,na.rm=FALSE){
     group_by(...)%>% 
     summarize(median=median({{summ_vars}},na.rm=na.rm),mean=mean({{summ_vars}},na.rm=na.rm),sd=sd({{summ_vars}},na.rm=na.rm)) 
     }
-```
-
-``` r
-#Exercise 2 documentation with Roxygen 
-#Roxygen: list(markdown = TRUE)
 ```
 
 ``` r
@@ -151,6 +154,41 @@ summarize_data(penguins,island,summ_vars=bill_length_mm
     ## 3 Torgersen   NA    NA   NA
 
 ``` r
+summarize_data(penguins,species,island,summ_vars=bill_length_mm,na.rm=TRUE)
+```
+
+    ## `summarise()` has grouped output by 'species'. You can override using the
+    ## `.groups` argument.
+
+    ## # A tibble: 5 × 5
+    ## # Groups:   species [3]
+    ##   species   island    median  mean    sd
+    ##   <fct>     <fct>      <dbl> <dbl> <dbl>
+    ## 1 Adelie    Biscoe      38.7  39.0  2.48
+    ## 2 Adelie    Dream       38.6  38.5  2.47
+    ## 3 Adelie    Torgersen   38.9  39.0  3.03
+    ## 4 Chinstrap Dream       49.6  48.8  3.34
+    ## 5 Gentoo    Biscoe      47.3  47.5  3.08
+
+``` r
+summarize_data(penguins,species,island,summ_vars=bill_length_mm
+,na.rm=TRUE)
+```
+
+    ## `summarise()` has grouped output by 'species'. You can override using the
+    ## `.groups` argument.
+
+    ## # A tibble: 5 × 5
+    ## # Groups:   species [3]
+    ##   species   island    median  mean    sd
+    ##   <fct>     <fct>      <dbl> <dbl> <dbl>
+    ## 1 Adelie    Biscoe      38.7  39.0  2.48
+    ## 2 Adelie    Dream       38.6  38.5  2.47
+    ## 3 Adelie    Torgersen   38.9  39.0  3.03
+    ## 4 Chinstrap Dream       49.6  48.8  3.34
+    ## 5 Gentoo    Biscoe      47.3  47.5  3.08
+
+``` r
 #test to confirm a summary tibble is generated
 test_that("A table is generated as the ouput", 
           {expect_gt(length(summarize_data(penguins,species,summ_vars=bill_length_mm
@@ -160,7 +198,7 @@ na.rm=FALSE)),0)
   })
 ```
 
-    ## Test passed 🎉
+    ## Test passed 🥇
 
 ``` r
 #run into error because providing non_numeric variable or providing a group_by variable not existed in the data 
@@ -170,6 +208,29 @@ test_that("run into error with non_numeric summ_var",
   expect_error(summarize_data(penguins,languages,summ_vars=sex
 ,na.rm=TRUE))
 })
+```
+
+    ## Test passed 😀
+
+``` r
+#test if an expected value is generated 
+#I first generated the median results using dplyr filtering to confirm the ideal output 
+
+expected_mean<-penguins%>%
+  group_by(species,island)%>%
+  summarize(median=median(bill_length_mm,na.rm=TRUE),mean=mean(bill_length_mm,na.rm=TRUE),sd=sd(bill_length_mm,na.rm=TRUE))
+```
+
+    ## `summarise()` has grouped output by 'species'. You can override using the
+    ## `.groups` argument.
+
+``` r
+#I then run the test to see if the same output is generated
+
+test_that ("generate the same out put",{
+ expect_equal(summarize_data(penguins,species,island,summ_vars=bill_length_mm
+,na.rm=TRUE),expected_mean)
+  })
 ```
 
     ## Test passed 🥇
