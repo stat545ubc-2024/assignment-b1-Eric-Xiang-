@@ -1,15 +1,9 @@
 Assignment B1
 ================
 Eric Xiang
-2024-10-24
+2024-10-31
 
 ``` r
-#install if needed
-#install.packages("roxygen2")
-```
-
-``` r
-#import 
 library(palmerpenguins)# use penguin dataset to test the function 
 library(dplyr)#for data manipulation
 ```
@@ -26,7 +20,7 @@ library(dplyr)#for data manipulation
     ##     intersect, setdiff, setequal, union
 
 ``` r
-library(tidyverse)#
+library(tidyverse)#data manipulation 
 ```
 
     ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
@@ -41,7 +35,7 @@ library(tidyverse)#
     ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
 ``` r
-library(testthat)
+library(testthat)#for testing the function 
 ```
 
     ## 
@@ -63,40 +57,12 @@ library(testthat)
     ## 
     ##     matches
 
-``` r
-library(usethis)
-library(devtools)#for marking down the function
-```
+**Exercise 1:** Create the function. The function summarize_data intends
+to calculate the median, mean, and standard deviation (sd) under certain
+grouping condition in a dataset. An na.rm argument is used to indicate
+if missing value (NA) should be removed or not from the data.
 
-    ## 
-    ## Attaching package: 'devtools'
-    ## 
-    ## The following object is masked from 'package:testthat':
-    ## 
-    ##     test_file
-
-``` r
-library(roxygen2)
-library(here)
-```
-
-    ## here() starts at C:/Users/Eric Xiang/Desktop/assignment-b1-EricXiang1104
-
-``` r
-#Exercise 2 documentation with Roxygen 
-
-
-#' Summarize the variables in the provided data 
-#'
-#' @param data: a data set in the data frame format 
-#' @param ...  ellipse, indicating one or multiple grouping variables, has to be a categorical variable existed in the dataset to group the population  
-#' @param summ_vars: a summarizing variable must be numeric variable and existed in the dataset 
-#'@param na.rm: logical variable to indicate if missing value should be removed or not. default is FALSE(not remove) 
-#' @return A summayr tibble to calculate the mean, median and standard deviation of the indicated variables. 
-#' @examples
-#' summarize_data(penguins,species,island,summ_vars=bill_length_mm,na.rm=TRUE)
-#' summarize_data(penguins,sex,island,summ_vars=bill_depth_mm,na.rm=TRUE)
-```
+It will show error message if summ_vars is not a numeric.
 
 ``` r
 summarize_data<- function(data,...,summ_vars,na.rm=FALSE){
@@ -111,10 +77,38 @@ summarize_data<- function(data,...,summ_vars,na.rm=FALSE){
     }
 ```
 
-``` r
-#exercise include examples 
+**Exercise 2:** Documentation with Roxygen2
 
-#working example. We utilize the penguin data to provide example. This is to show the functional example. The function first groups the data by species and island. Then, it summarizes the bill_length_mm in term of mdian, mean and sd for each group. 
+``` r
+#' Title: Summarize the variables in the provided data 
+#'Function description: This function is to summarize the numeric variable in a dataset when given one or more grouping condition. It will generate a summary tibble to show the calculated median, mean and standard deviation of the numeric variable under the indicated grouping conditions. There is an option for user to ignore missing value with na.rm arguement. 
+
+#' @param data: a data set in the data frame format 
+#' @param ...  ellipse, indicating one or multiple grouping variables, has to be a categorical variable existed in the dataset to group the population  
+#' @param summ_vars: a summarizing variable must be numeric variable and existed in the dataset 
+#'@param na.rm: logical variable to indicate if missing value should be removed or not. default is FALSE(not remove) 
+#' @return A summary tibble with calculated  mean, median and standard deviation of the indicated variables. 
+#' @examples
+#' summarize_data(penguins,species,island,summ_vars=bill_length_mm,na.rm=TRUE)
+#' summarize_data(penguins,sex,island,summ_vars=bill_depth_mm,na.rm=TRUE)
+```
+
+**Exercise3:** Exercise includes examples
+
+**Working example:** I utilized the penguin data to provide example. The
+function first grouped the data by species and island. Then, it
+summarized the bill_length_mm in terms of mdian, mean and standard
+deviation(sd) for each group.
+
+**Not working example:** .I provided a summ_vars that is not numeric to
+see if an error message appears. I observed that the expected error
+message appeared.
+
+I also provided with grouping variables not existed in the dataset and
+found the expected error message appeared reminding me that the grouping
+variable was not found in the dataset.
+
+``` r
 summarize_data(penguins,species,island,summ_vars=bill_length_mm
 ,na.rm=TRUE)
 ```
@@ -142,54 +136,32 @@ summarize_data(penguins,species,island,summ_vars=sex
     ## Error in summarize_data(penguins, species, island, summ_vars = sex, na.rm = TRUE): Input summ_var is not in the data set or is not a numeric variable, double check
 
 ``` r
-summarize_data(penguins,island,summ_vars=bill_length_mm
-,na.rm=FALSE)
-```
-
-    ## # A tibble: 3 × 4
-    ##   island    median  mean    sd
-    ##   <fct>      <dbl> <dbl> <dbl>
-    ## 1 Biscoe      NA    NA   NA   
-    ## 2 Dream       44.7  44.2  5.95
-    ## 3 Torgersen   NA    NA   NA
-
-``` r
-summarize_data(penguins,species,island,summ_vars=bill_length_mm,na.rm=TRUE)
-```
-
-    ## `summarise()` has grouped output by 'species'. You can override using the
-    ## `.groups` argument.
-
-    ## # A tibble: 5 × 5
-    ## # Groups:   species [3]
-    ##   species   island    median  mean    sd
-    ##   <fct>     <fct>      <dbl> <dbl> <dbl>
-    ## 1 Adelie    Biscoe      38.7  39.0  2.48
-    ## 2 Adelie    Dream       38.6  38.5  2.47
-    ## 3 Adelie    Torgersen   38.9  39.0  3.03
-    ## 4 Chinstrap Dream       49.6  48.8  3.34
-    ## 5 Gentoo    Biscoe      47.3  47.5  3.08
-
-``` r
-summarize_data(penguins,species,island,summ_vars=bill_length_mm
+summarize_data(penguins,languages,island,summ_vars=bill_length_mm
 ,na.rm=TRUE)
 ```
 
-    ## `summarise()` has grouped output by 'species'. You can override using the
-    ## `.groups` argument.
+    ## Error in `group_by()`:
+    ## ! Must group by variables found in `.data`.
+    ## ✖ Column `languages` is not found.
 
-    ## # A tibble: 5 × 5
-    ## # Groups:   species [3]
-    ##   species   island    median  mean    sd
-    ##   <fct>     <fct>      <dbl> <dbl> <dbl>
-    ## 1 Adelie    Biscoe      38.7  39.0  2.48
-    ## 2 Adelie    Dream       38.6  38.5  2.47
-    ## 3 Adelie    Torgersen   38.9  39.0  3.03
-    ## 4 Chinstrap Dream       49.6  48.8  3.34
-    ## 5 Gentoo    Biscoe      47.3  47.5  3.08
+**Exercise_4:** Test the function
+
+Three tests were created to test the ouput of my function.
+
+The **first test** is to show if the table is generated. Ideally, a
+summary tibble should be generated with one or more than one row(s) and
+column(s).
+
+The **second test** is to confirm error messages are shown when giving
+the function unexpected output, either a non-numeric input for summ-vars
+or a grouping variable not found in the dataset
+
+The **third test** is to confirm if the expected values are calculated
+when using the summarize_data function. The result of the function is
+compared with the output generated using dplyr.
 
 ``` r
-#test to confirm a summary tibble is generated
+#Test to confirm a summary tibble is generated
 test_that("A table is generated as the ouput", 
           {expect_gt(length(summarize_data(penguins,species,summ_vars=bill_length_mm
 ,na.rm=TRUE)),0)
@@ -198,10 +170,11 @@ na.rm=FALSE)),0)
   })
 ```
 
-    ## Test passed 🥇
+    ## Test passed 🥳
 
 ``` r
-#run into error because providing non_numeric variable or providing a group_by variable not existed in the data 
+#Test if rejecting non_numeric variable as the summ_vars input or providing a group_by variable not existed in the data 
+ 
 test_that("run into error with non_numeric summ_var",
  {expect_error(summarize_data(penguins,island,summ_vars=sex
 ,na.rm=TRUE))
@@ -213,7 +186,7 @@ test_that("run into error with non_numeric summ_var",
     ## Test passed 😀
 
 ``` r
-#test if an expected value is generated 
+#Test if an expected value is generated 
 #I first generated the median results using dplyr filtering to confirm the ideal output 
 
 expected_mean<-penguins%>%
@@ -225,7 +198,7 @@ expected_mean<-penguins%>%
     ## `.groups` argument.
 
 ``` r
-#I then run the test to see if the same output is generated
+#I then ran  the test to see if the same output is generated
 
 test_that ("generate the same out put",{
  expect_equal(summarize_data(penguins,species,island,summ_vars=bill_length_mm
@@ -233,4 +206,4 @@ test_that ("generate the same out put",{
   })
 ```
 
-    ## Test passed 🥇
+    ## Test passed 🎊
