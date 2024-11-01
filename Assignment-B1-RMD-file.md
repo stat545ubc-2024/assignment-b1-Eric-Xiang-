@@ -74,7 +74,7 @@ summarize_data<- function(data,...,summ_vars,na.rm=FALSE){
   data%>%
     group_by(...)%>% 
     summarize(median=median({{summ_vars}},na.rm=na.rm),mean=mean({{summ_vars}},na.rm=na.rm),sd=sd({{summ_vars}},na.rm=na.rm)) 
-    }
+}
 ```
 
 **Exercise 2:** Documentation with Roxygen2
@@ -97,14 +97,14 @@ summarize_data<- function(data,...,summ_vars,na.rm=FALSE){
 
 **Working example:** I utilized the penguin data to provide example. The
 function first grouped the data by species and island. Then, it
-summarized the bill_length_mm in terms of mdian, mean and standard
+summarized the bill_length_mm in terms of median, mean and standard
 deviation(sd) for each group.
 
 **Not working example:** .I provided a summ_vars that is not numeric to
 see if an error message appears. I observed that the expected error
 message appeared.
 
-I also provided with grouping variables not existed in the dataset and
+I also provided with grouping variables not exist in the dataset and
 found the expected error message appeared reminding me that the grouping
 variable was not found in the dataset.
 
@@ -170,12 +170,12 @@ na.rm=FALSE)),0)
   })
 ```
 
-    ## Test passed 🥳
+    ## Test passed 😸
 
 ``` r
-#Test if rejecting non_numeric variable as the summ_vars input or providing a group_by variable not existed in the data 
+#Test if rejecting non_numeric variable as the summ_vars input or providing a group_by variable not exist in the data 
  
-test_that("run into error with non_numeric summ_var",
+test_that("run into error ",
  {expect_error(summarize_data(penguins,island,summ_vars=sex
 ,na.rm=TRUE))
   expect_error(summarize_data(penguins,languages,summ_vars=sex
@@ -183,13 +183,13 @@ test_that("run into error with non_numeric summ_var",
 })
 ```
 
-    ## Test passed 😀
+    ## Test passed 🌈
 
 ``` r
 #Test if an expected value is generated 
 #I first generated the median results using dplyr filtering to confirm the ideal output 
 
-expected_mean<-penguins%>%
+expected_summary<-penguins%>%
   group_by(species,island)%>%
   summarize(median=median(bill_length_mm,na.rm=TRUE),mean=mean(bill_length_mm,na.rm=TRUE),sd=sd(bill_length_mm,na.rm=TRUE))
 ```
@@ -202,8 +202,8 @@ expected_mean<-penguins%>%
 
 test_that ("generate the same out put",{
  expect_equal(summarize_data(penguins,species,island,summ_vars=bill_length_mm
-,na.rm=TRUE),expected_mean)
+,na.rm=TRUE),expected_summary)
   })
 ```
 
-    ## Test passed 🎊
+    ## Test passed 😸
